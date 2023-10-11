@@ -1,0 +1,15 @@
+server:
+  port: 8088
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: your_database
+    password: your_pwd
+    url: jdbc:mysql://your_addr:3306/freefish?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=GMT%2B8
+    type: com.zaxxer.hikari.HikariDataSource
+
+logging:
+  level:
+    root: info
+    com.which.freefish: info
