@@ -1,38 +1,53 @@
-## Freefish 咸鱼社区
+# Freefish 咸鱼社区
+
+## 环境准备
+
+Kibana可视化Dev Tools创建ES索引库 `bms_post`:
+```
+PUT bms_post
+{
+  "mappings": {
+    "properties": {
+      "title": {
+        "type": "text",
+        "analyzer": "ik_max_word",
+        "search_analyzer": "ik_smart",
+        "fields": {
+          "keyword": {
+            "type": "keyword",
+            "ignore_above": 256
+          }
+        }
+      },
+      "content": {
+        "type": "text",
+        "analyzer": "ik_max_word",
+        "search_analyzer": "ik_smart",
+        "fields": {
+          "keyword": {
+            "type": "keyword",
+            "ignore_above": 256
+          }
+        }
+      }
+    }
+  }
+}
+```
 
 ### 在线体验
 
-http://freefish.love
+> http://freefish.love
 
 ### 项目主要业务及实现的功能
 
 本项目类似一个简版的掘金这样的技术社区，实现了多个用户注册，登录，发帖，评论，关注，搜索等功能。
 
-### 前端技术栈
-
-Vue
-
-Vuex
-
-Vue Router
-
-Axios
-
-Bulma
-
-Buefy
-
-Element
-
-Vditor
-
-DarkReader
-
 ### 后端技术栈
 
 Spring Boot
 
-Mysql
+MySQL
 
 Mybatis
 
@@ -45,6 +60,8 @@ JWT
 Lombok
 
 ElasticSearch
+
+Kibana
 
 Canal
 
