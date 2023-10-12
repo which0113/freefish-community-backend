@@ -8,14 +8,13 @@ import java.io.Serializable;
 
 @Document(indexName = "bms_post")
 @Data
-public class PostIdESDTO implements Serializable {
+public class PostEsDTO implements Serializable {
+    private static final long serialVersionUID = 1L;
 
-    /**
-     * id
-     */
     @Id
     private String id;
 
-    private static final long serialVersionUID = 1L;
+    private String title;
 
+    private String content;
 }

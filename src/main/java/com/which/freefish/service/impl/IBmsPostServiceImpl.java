@@ -10,7 +10,7 @@ import com.which.freefish.mapper.BmsTagMapper;
 import com.which.freefish.mapper.BmsTopicMapper;
 import com.which.freefish.mapper.UmsUserMapper;
 import com.which.freefish.model.dto.CreateTopicDTO;
-import com.which.freefish.model.dto.PostIdESDTO;
+import com.which.freefish.model.dto.PostEsDTO;
 import com.which.freefish.model.entity.BmsPost;
 import com.which.freefish.model.entity.BmsTag;
 import com.which.freefish.model.entity.BmsTopicTag;
@@ -142,8 +142,8 @@ public class IBmsPostServiceImpl extends ServiceImpl<BmsTopicMapper, BmsPost> im
         }
         // 构造查询
         NativeSearchQuery searchQuery = new NativeSearchQueryBuilder().withQuery(boolQueryBuilder).build();
-        SearchHits<PostIdESDTO> search = elasticsearchRestTemplate.search(searchQuery, PostIdESDTO.class);
-        List<SearchHit<PostIdESDTO>> searchHitList = search.getSearchHits();
+        SearchHits<PostEsDTO> search = elasticsearchRestTemplate.search(searchQuery, PostEsDTO.class);
+        List<SearchHit<PostEsDTO>> searchHitList = search.getSearchHits();
         List<String> postIdList = searchHitList.stream().map(searchHit -> searchHit.getContent().getId())
                 .collect(Collectors.toList());
         StringBuilder ids = new StringBuilder();
