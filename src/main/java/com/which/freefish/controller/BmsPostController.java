@@ -33,7 +33,7 @@ public class BmsPostController extends BaseController {
     private IUmsUserService umsUserService;
 
     @GetMapping("/list")
-    @Cacheable(cacheNames = "allPost", key = "1001")
+    @Cacheable(cacheNames = "allPost", key = "#tab")
     public ApiResult<Page<PostVO>> list(@RequestParam(value = "tab", defaultValue = "latest") String tab,
                                         @RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
                                         @RequestParam(value = "size", defaultValue = "10") Integer pageSize) {
