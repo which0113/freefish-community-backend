@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.util.List;
 
 @Component
@@ -29,13 +30,18 @@ public class CanalUtils {
 
     public void startCanal() {
         // 创建链接
-        CanalConnector connector = CanalConnectors.newSingleConnector(new InetSocketAddress(AddressUtils.getHostIp(),
-                11111), "example", "", "");
+        InetSocketAddress inetSocketAddress = new InetSocketAddress(AddressUtils.getHostIp(), 11111);
+        if (!portIsOpen(inetSocketAddress)) {
+            return;
+        }
+        CanalConnector connector = CanalConnectors.newSingleConnector(inetSocketAddress, "example", "", "");
+
         int batchSize = 1000;
         int emptyCount = 0;
         try {
             connector.connect();
-            connector.subscribe(".*\\..*");
+            // 过滤设置，只同步 freefish 数据库的 bms_post 表
+            connector.subscribe("freefish.bms_post");
             connector.rollback();
             while (true) {
                 // 获取指定数量的数据
@@ -63,6 +69,17 @@ public class CanalUtils {
         }
     }
 
+    private boolean portIsOpen(InetSocketAddress address) {
+        try (Socket socket = new Socket()) {
+            socket.connect(address, 1000);
+            log.info("canal success : 连接成功！");
+            return true;
+        } catch (Exception e) {
+            log.info("canal error : 端口关闭或连接超时！");
+            return false;
+        }
+    }
+
     private void printEntry(List<CanalEntry.Entry> entrys) {
         for (CanalEntry.Entry entry : entrys) {
             if (entry.getEntryType() == CanalEntry.EntryType.TRANSACTIONBEGIN || entry.getEntryType() == CanalEntry.EntryType.TRANSACTIONEND) {
@@ -78,7 +95,7 @@ public class CanalUtils {
             }
 
             CanalEntry.EventType eventType = rowChage.getEventType();
-            System.out.println(String.format("================&gt; binlog[%s:%s] , name[%s,%s] , eventType : %s",
+            System.out.println(String.format("================> binlog[%s:%s] , name[%s,%s] , eventType : %s",
                     entry.getHeader().getLogfileName(), entry.getHeader().getLogfileOffset(),
                     entry.getHeader().getSchemaName(), entry.getHeader().getTableName(),
                     eventType));
@@ -87,30 +104,48 @@ public class CanalUtils {
             for (CanalEntry.RowData rowData : rowChage.getRowDatasList()) {
                 if (eventType == CanalEntry.EventType.DELETE) {
                     List<CanalEntry.Column> columns = rowData.getBeforeColumnsList();
-                    printColumn(columns);
-
+//                    printColumn(columns);
                     String id = columns.get(0).getValue();
                     postEsMapper.deleteById(id);
+
+                    log.info("存在更新，操作为删除数据");
                 } else if (eventType == CanalEntry.EventType.INSERT) {
-                    savaData(rowData);
+                    List<CanalEntry.Column> columns = rowData.getAfterColumnsList();
+//                    printColumn(columns);
+                    String id = columns.get(0).getValue();
+                    BmsPost bmsPost = bmsPostMapper.selectById(id);
+                    PostEsDTO postEsDTO = new PostEsDTO();
+                    if (bmsPost != null) {
+                        BeanUtils.copyProperties(bmsPost, postEsDTO);
+                    }
+                    postEsMapper.save(postEsDTO);
+
+                    log.info("存在更新，操作为新增数据");
                 } else {
-                    printColumn(rowData.getBeforeColumnsList());
-                    savaData(rowData);
+//                    printColumn(rowData.getBeforeColumnsList());
+
+                    List<CanalEntry.Column> columns = rowData.getAfterColumnsList();
+                    // 如果存在至少一个元素的 updated 属性为 true => hasUpdate = ture;
+                    boolean hasUpdate = columns.stream().anyMatch(CanalEntry.Column::getUpdated);
+                    // 不存在更新，即 hasUpdate = false，return
+                    if (!hasUpdate) {
+                        log.info("不存在更新，操作为查询数据");
+                        return;
+                    }
+//                    printColumn(columns);
+
+                    String id = columns.get(0).getValue();
+                    BmsPost bmsPost = bmsPostMapper.selectById(id);
+
+                    PostEsDTO postEsDTO = new PostEsDTO();
+                    if (bmsPost != null) {
+                        BeanUtils.copyProperties(bmsPost, postEsDTO);
+                    }
+                    postEsMapper.save(postEsDTO);
+                    log.info("存在更新，操作为修改数据");
                 }
             }
         }
-    }
-
-    private void savaData(CanalEntry.RowData rowData) {
-        List<CanalEntry.Column> columns = rowData.getAfterColumnsList();
-        printColumn(columns);
-
-        String id = columns.get(0).getValue();
-        BmsPost bmsPost = bmsPostMapper.selectById(id);
-
-        PostEsDTO postEsDTO = new PostEsDTO();
-        BeanUtils.copyProperties(bmsPost, postEsDTO);
-        postEsMapper.save(postEsDTO);
     }
 
     private void printColumn(List<CanalEntry.Column> columns) {

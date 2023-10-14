@@ -20,10 +20,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         try {
-            if(isProtectedUrl(request)) {
+            if (isProtectedUrl(request)) {
 //                System.out.println(request.getMethod());
-                if(!request.getMethod().equals("OPTIONS"))
+                if (!request.getMethod().equals("OPTIONS")) {
                     request = JwtUtil.validateTokenAndAddUserIdToHeader(request);
+                }
             }
         } catch (Exception e) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
@@ -45,9 +46,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         protectedPaths.add("/relationship/validate/*");
 
         boolean bFind = false;
-        for( String passedPath : protectedPaths ) {
+        for (String passedPath : protectedPaths) {
             bFind = pathMatcher.match(passedPath, request.getServletPath());
-            if( bFind ) {
+            if (bFind) {
                 break;
             }
         }

@@ -1,13 +1,13 @@
 package com.which.freefish.controller;
 
 import com.which.freefish.common.api.ApiResult;
+import com.which.freefish.jwt.JwtUtil;
 import com.which.freefish.model.dto.CommentDTO;
 import com.which.freefish.model.entity.BmsComment;
 import com.which.freefish.model.entity.UmsUser;
 import com.which.freefish.model.vo.CommentVO;
 import com.which.freefish.service.IBmsCommentService;
 import com.which.freefish.service.IUmsUserService;
-import com.which.freefish.jwt.JwtUtil;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -20,6 +20,7 @@ public class BmsCommentController extends BaseController {
 
     @Resource
     private IBmsCommentService bmsCommentService;
+
     @Resource
     private IUmsUserService umsUserService;
 
@@ -28,6 +29,7 @@ public class BmsCommentController extends BaseController {
         List<CommentVO> lstBmsComment = bmsCommentService.getCommentsByTopicID(topicid);
         return ApiResult.success(lstBmsComment);
     }
+
     @PostMapping("/add_comment")
     public ApiResult<BmsComment> add_comment(@RequestHeader(value = JwtUtil.USER_NAME) String userName,
                                              @RequestBody CommentDTO dto) {

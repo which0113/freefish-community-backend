@@ -65,6 +65,8 @@ Kibana
 
 Canal
 
+Redis
+
 ### 致谢
 
 本项目大量借鉴了[极光社区项目](https://github.com/haoyu21/aurora)
