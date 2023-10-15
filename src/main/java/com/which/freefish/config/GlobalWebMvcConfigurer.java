@@ -27,9 +27,9 @@ public class GlobalWebMvcConfigurer implements WebMvcConfigurer {
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
-        //允许所有域名进行跨域调用
+        //允许所有进行跨域调用
         config.addAllowedOrigin("*");
-        //允许指定域名进行跨域调用
+        //允许指定 网络协议 域名 端口 进行跨域调用
 //        config.addAllowedOrigin("http://freefish.love");
         //允许跨越发送cookie
         config.setAllowCredentials(true);
