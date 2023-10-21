@@ -29,6 +29,7 @@ import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -37,7 +38,6 @@ import org.springframework.util.ObjectUtils;
 import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
-
 
 @Service
 public class IBmsPostServiceImpl extends ServiceImpl<BmsTopicMapper, BmsPost> implements IBmsPostService {
@@ -58,6 +58,9 @@ public class IBmsPostServiceImpl extends ServiceImpl<BmsTopicMapper, BmsPost> im
 
     @Resource
     private ElasticsearchRestTemplate elasticsearchRestTemplate;
+
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Override
     public Page<PostVO> getList(Page<PostVO> page, String tab) {
@@ -82,6 +85,9 @@ public class IBmsPostServiceImpl extends ServiceImpl<BmsTopicMapper, BmsPost> im
                 .createTime(new Date())
                 .build();
         this.baseMapper.insert(topic);
+
+        // 清空redis缓存
+        redisTemplate.delete("*");
 
         // 用户积分增加
         int newScore = user.getScore() + 1;
