@@ -18,6 +18,7 @@ import javax.annotation.Resource;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.List;
+import java.util.Set;
 
 @Component
 @Slf4j
@@ -61,6 +62,12 @@ public class CanalUtils {
                     }
                 } else {
                     emptyCount = 0;
+                    // 清空redis缓存
+                    Set<String> keys = redisTemplate.keys("*");
+                    if (keys != null) {
+                        redisTemplate.delete(keys);
+                        log.info("已清空缓存");
+                    }
                     printEntry(message.getEntries());
                 }
                 // 提交确认
@@ -111,8 +118,6 @@ public class CanalUtils {
 //                    printColumn(columns);
                     String id = columns.get(0).getValue();
                     postEsMapper.deleteById(id);
-                    // 清空redis缓存
-                    redisTemplate.delete("*");
 
                     log.info("存在更新，操作为删除数据");
                 } else if (eventType == CanalEntry.EventType.INSERT) {
@@ -120,8 +125,6 @@ public class CanalUtils {
 //                    printColumn(columns);
                     String id = columns.get(0).getValue();
                     savePostEs(id);
-                    // 清空redis缓存
-                    redisTemplate.delete("*");
 
                     log.info("存在更新，操作为新增数据");
                 } else {
@@ -139,8 +142,6 @@ public class CanalUtils {
 
                     String id = columns.get(0).getValue();
                     savePostEs(id);
-                    // 清空redis缓存
-                    redisTemplate.delete("*");
 
                     log.info("存在更新，操作为修改数据");
                 }

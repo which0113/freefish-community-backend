@@ -9,7 +9,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class GlobalWebMvcConfigurer implements WebMvcConfigurer {
+public class GlobalWebMvcConfiguration implements WebMvcConfigurer {
 
     /**
      * 跨域
