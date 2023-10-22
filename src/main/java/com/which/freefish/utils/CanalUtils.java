@@ -11,6 +11,7 @@ import com.which.freefish.model.dto.PostEsDTO;
 import com.which.freefish.model.entity.BmsPost;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -27,6 +28,9 @@ public class CanalUtils {
 
     @Resource
     private PostEsMapper postEsMapper;
+
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
 
     public void startCanal() {
         // 创建链接
@@ -107,18 +111,17 @@ public class CanalUtils {
 //                    printColumn(columns);
                     String id = columns.get(0).getValue();
                     postEsMapper.deleteById(id);
+                    // 清空redis缓存
+                    redisTemplate.delete("*");
 
                     log.info("存在更新，操作为删除数据");
                 } else if (eventType == CanalEntry.EventType.INSERT) {
                     List<CanalEntry.Column> columns = rowData.getAfterColumnsList();
 //                    printColumn(columns);
                     String id = columns.get(0).getValue();
-                    BmsPost bmsPost = bmsPostMapper.selectById(id);
-                    PostEsDTO postEsDTO = new PostEsDTO();
-                    if (bmsPost != null) {
-                        BeanUtils.copyProperties(bmsPost, postEsDTO);
-                    }
-                    postEsMapper.save(postEsDTO);
+                    savePostEs(id);
+                    // 清空redis缓存
+                    redisTemplate.delete("*");
 
                     log.info("存在更新，操作为新增数据");
                 } else {
@@ -135,17 +138,23 @@ public class CanalUtils {
 //                    printColumn(columns);
 
                     String id = columns.get(0).getValue();
-                    BmsPost bmsPost = bmsPostMapper.selectById(id);
+                    savePostEs(id);
+                    // 清空redis缓存
+                    redisTemplate.delete("*");
 
-                    PostEsDTO postEsDTO = new PostEsDTO();
-                    if (bmsPost != null) {
-                        BeanUtils.copyProperties(bmsPost, postEsDTO);
-                    }
-                    postEsMapper.save(postEsDTO);
                     log.info("存在更新，操作为修改数据");
                 }
             }
         }
+    }
+
+    private void savePostEs(String id) {
+        BmsPost bmsPost = bmsPostMapper.selectById(id);
+        PostEsDTO postEsDTO = new PostEsDTO();
+        if (bmsPost != null) {
+            BeanUtils.copyProperties(bmsPost, postEsDTO);
+        }
+        postEsMapper.save(postEsDTO);
     }
 
     private void printColumn(List<CanalEntry.Column> columns) {
