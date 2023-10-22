@@ -19,7 +19,6 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <mybatis-plus.version>3.4.2</mybatis-plus.version>
         <fastjson.version>1.2.75</fastjson.version>
-        <hutool.version>5.5.7</hutool.version>
         <jwt.version>0.9.1</jwt.version>
         <emoji-java.version>5.1.1</emoji-java.version>
     </properties>
@@ -53,12 +52,6 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>
-        </dependency>
-        <!-- HuTool -->
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-all</artifactId>
-            <version>${hutool.version}</version>
         </dependency>
         <!-- mysql -->
         <dependency>
