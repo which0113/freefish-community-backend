@@ -48,7 +48,7 @@ public class MD5Utils {
     }
 
 
-//    public static void main(String[] args) {
+//    public static void Main(String[] args) {
 //        String pwd = MD5Utils.getPwd("234");
 //        System.out.println(pwd);
 //    }

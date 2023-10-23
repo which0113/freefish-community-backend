@@ -130,7 +130,7 @@ VALUES ('1332681213400817665', '聚合查询并统计',
         '1349618748226658305', 0, 0, 55, b'0', b'0', 1, '2023-11-28 21:42:16', '2023-11-29 15:00:42');
 INSERT INTO `bms_post`
 VALUES ('1335149981733449729', '视频嵌入',
-        'https://www.bilibili.com/video/BV1a24y1z7Ww\n\nhttps://www.bilibili.com/video/BV1n84y1U7d7\n\n```\n.vditor-reset pre > code\n```\n\n```\npublic class HelloWorld {\n\npublic static void main(String[] args) {\n    System.out.println(\"Hello World!\");\n}\n}\n```\n\n',
+        'https://www.bilibili.com/video/BV1a24y1z7Ww\n\nhttps://www.bilibili.com/video/BV1n84y1U7d7\n\n```\n.vditor-reset pre > code\n```\n\n```\npublic class HelloWorld {\n\npublic static void Main(String[] args) {\n    System.out.println(\"Hello World!\");\n}\n}\n```\n\n',
         '1317498859501797378', 0, 0, 41, b'0', b'0', 0, '2023-12-05 17:12:16', '2023-01-14 13:06:16');
 
 -- ----------------------------
