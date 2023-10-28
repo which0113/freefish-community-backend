@@ -28,6 +28,7 @@ public interface BmsTopicMapper extends BaseMapper<BmsPost> {
      * @return
      */
     List<BmsPost> selectRecommend(@Param("id") String id);
+
     /**
      * 全文检索
      *

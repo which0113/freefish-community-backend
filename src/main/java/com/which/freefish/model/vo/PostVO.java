@@ -72,4 +72,8 @@ public class PostVO implements Serializable {
      * 修改时间
      */
     private Date modifyTime;
+    /**
+     * 匹配度分数
+     */
+    private Float score;
 }

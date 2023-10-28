@@ -22,6 +22,7 @@ import com.which.freefish.service.IBmsTagService;
 import com.which.freefish.service.IUmsUserService;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
@@ -150,15 +151,23 @@ public class IBmsPostServiceImpl extends ServiceImpl<BmsTopicMapper, BmsPost> im
         NativeSearchQuery searchQuery = new NativeSearchQueryBuilder().withQuery(boolQueryBuilder).build();
         SearchHits<PostEsDTO> search = elasticsearchRestTemplate.search(searchQuery, PostEsDTO.class);
         List<SearchHit<PostEsDTO>> searchHitList = search.getSearchHits();
-        List<String> postIdList = searchHitList.stream().map(searchHit -> searchHit.getContent().getId())
-                .collect(Collectors.toList());
-        StringBuilder ids = new StringBuilder();
-        for (String id : postIdList) {
-            ids.append(id).append(",");
-        }
-        ids.append("-1");
-        // 查询话题
-        Page<PostVO> iPage = this.baseMapper.searchByKey(page, ids.toString());
+        List<PostVO> postVOList = searchHitList.stream().map(searchHit -> {
+            String id = searchHit.getContent().getId();
+            PostVO postVO = new PostVO();
+            BmsPost post = this.baseMapper.selectById(id);
+            BeanUtils.copyProperties(post, postVO);
+            UmsUser user = umsUserMapper.selectById(post.getUserId());
+            postVO.setUsername(user.getUsername());
+            postVO.setAlias(user.getAlias());
+            postVO.setAvatar(user.getAvatar());
+            Float score = searchHit.getScore();
+            postVO.setScore(score);
+            return postVO;
+        }).sorted((o1, o2) -> Float.compare(o2.getScore(), o1.getScore())).collect(Collectors.toList());
+
+        Page<PostVO> iPage = new Page<>();
+        iPage.setRecords(postVOList);
+
         // 查询话题的标签
         setTopicTags(iPage);
         return iPage;
