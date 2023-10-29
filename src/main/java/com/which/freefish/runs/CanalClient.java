@@ -1,4 +1,4 @@
-package com.which.freefish.utils;
+package com.which.freefish.runs;
 
 import com.alibaba.otter.canal.client.CanalConnector;
 import com.alibaba.otter.canal.client.CanalConnectors;
@@ -11,6 +11,7 @@ import com.which.freefish.model.dto.PostEsDTO;
 import com.which.freefish.model.entity.BmsPost;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -20,9 +21,12 @@ import java.net.Socket;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * 项目启动，执行canal客户端监听
+ */
 @Component
 @Slf4j
-public class CanalUtils {
+public class CanalClient implements CommandLineRunner {
 
     @Resource
     private BmsPostMapper bmsPostMapper;
@@ -33,7 +37,8 @@ public class CanalUtils {
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
 
-    public void startCanal() {
+    @Override
+    public void run(String... args) {
         // 创建链接
         InetSocketAddress inetSocketAddress = new InetSocketAddress(AddressUtils.getHostIp(), 11111);
         if (!portIsOpen(inetSocketAddress)) {

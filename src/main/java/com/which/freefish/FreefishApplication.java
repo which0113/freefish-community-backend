@@ -1,9 +1,7 @@
 package com.which.freefish;
 
 import com.which.freefish.jwt.JwtAuthenticationFilter;
-import com.which.freefish.utils.CanalUtils;
 import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -12,14 +10,10 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 
-import javax.annotation.Resource;
-
 @MapperScan("com.which.freefish.mapper")
 @EnableCaching
 @SpringBootApplication
-public class FreefishApplication extends SpringBootServletInitializer implements CommandLineRunner {
-    @Resource
-    private CanalUtils canalUtils;
+public class FreefishApplication extends SpringBootServletInitializer {
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
@@ -36,12 +30,6 @@ public class FreefishApplication extends SpringBootServletInitializer implements
 
     public static void main(String[] args) {
         SpringApplication.run(FreefishApplication.class, args);
-    }
-
-    @Override
-    public void run(String... args) throws Exception {
-        // 项目启动，执行canal客户端监听
-        canalUtils.startCanal();
     }
 
 }
