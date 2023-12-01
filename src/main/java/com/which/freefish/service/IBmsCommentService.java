@@ -11,8 +11,6 @@ import java.util.List;
 
 public interface IBmsCommentService extends IService<BmsComment> {
     /**
-     *
-     *
      * @param topicid
      * @return {@link BmsComment}
      */

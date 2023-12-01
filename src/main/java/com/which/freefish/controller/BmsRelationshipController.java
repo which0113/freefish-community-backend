@@ -3,11 +3,11 @@ package com.which.freefish.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.which.freefish.common.api.ApiResult;
 import com.which.freefish.common.exception.ApiAsserts;
+import com.which.freefish.jwt.JwtUtil;
 import com.which.freefish.model.entity.BmsFollow;
 import com.which.freefish.model.entity.UmsUser;
 import com.which.freefish.service.IBmsFollowService;
 import com.which.freefish.service.IUmsUserService;
-import com.which.freefish.jwt.JwtUtil;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 

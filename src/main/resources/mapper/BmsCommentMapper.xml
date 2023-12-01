@@ -12,9 +12,9 @@
     </resultMap>
 
     <select id="getCommentsByTopicID" resultMap="topicVO">
-        select bms_comment.*,ums_user.username,ums_user.alias
+        select bms_comment.*, ums_user.username, ums_user.alias
         from bms_comment
-        join ums_user on ums_user.id = bms_comment.user_id
+                 join ums_user on ums_user.id = bms_comment.user_id
         where topic_id = #{topicid}
         order by create_time desc
     </select>

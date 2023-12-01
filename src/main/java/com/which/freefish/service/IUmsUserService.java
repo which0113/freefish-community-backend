@@ -16,6 +16,7 @@ public interface IUmsUserService extends IService<UmsUser> {
      * @return 注册对象
      */
     UmsUser executeRegister(RegisterDTO dto);
+
     /**
      * 获取用户信息
      *
@@ -23,6 +24,7 @@ public interface IUmsUserService extends IService<UmsUser> {
      * @return dbUser
      */
     UmsUser getUserByUsername(String username);
+
     /**
      * 用户登录
      *
@@ -30,6 +32,7 @@ public interface IUmsUserService extends IService<UmsUser> {
      * @return 生成的JWT的token
      */
     String executeLogin(LoginDTO dto);
+
     /**
      * 获取用户信息
      *

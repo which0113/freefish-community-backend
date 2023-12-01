@@ -16,6 +16,7 @@ public interface IBmsTagService extends IService<BmsTag> {
      * @return
      */
     List<BmsTag> insertTags(List<String> tags);
+
     /**
      * 获取标签关联话题
      *

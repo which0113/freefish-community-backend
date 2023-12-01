@@ -15,6 +15,10 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class FreefishApplication extends SpringBootServletInitializer {
 
+    public static void main(String[] args) {
+        SpringApplication.run(FreefishApplication.class, args);
+    }
+
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
         return builder.sources(FreefishApplication.class);
@@ -26,10 +30,6 @@ public class FreefishApplication extends SpringBootServletInitializer {
         JwtAuthenticationFilter filter = new JwtAuthenticationFilter();
         registrationBean.setFilter(filter);
         return registrationBean;
-    }
-
-    public static void main(String[] args) {
-        SpringApplication.run(FreefishApplication.class, args);
     }
 
 }

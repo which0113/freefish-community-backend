@@ -16,6 +16,7 @@ public interface IBmsTopicTagService extends IService<BmsTopicTag> {
      * @return
      */
     List<BmsTopicTag> selectByTopicId(String topicId);
+
     /**
      * 创建中间关系
      *
@@ -24,6 +25,7 @@ public interface IBmsTopicTagService extends IService<BmsTopicTag> {
      * @return
      */
     void createTopicTag(String id, List<BmsTag> tags);
+
     /**
      * 获取标签换脸话题ID集合
      *

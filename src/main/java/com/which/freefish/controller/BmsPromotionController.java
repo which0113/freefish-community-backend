@@ -3,7 +3,6 @@ package com.which.freefish.controller;
 import com.which.freefish.common.api.ApiResult;
 import com.which.freefish.model.entity.BmsPromotion;
 import com.which.freefish.service.IBmsPromotionService;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

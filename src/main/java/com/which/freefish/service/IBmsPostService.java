@@ -21,6 +21,7 @@ public interface IBmsPostService extends IService<BmsPost> {
      * @return
      */
     Page<PostVO> getList(Page<PostVO> page, String tab);
+
     /**
      * 发布
      *
@@ -37,6 +38,7 @@ public interface IBmsPostService extends IService<BmsPost> {
      * @return
      */
     Map<String, Object> viewTopic(String id);
+
     /**
      * 获取随机推荐10篇
      *
@@ -44,6 +46,7 @@ public interface IBmsPostService extends IService<BmsPost> {
      * @return
      */
     List<BmsPost> getRecommend(String id);
+
     /**
      * 关键字检索
      *

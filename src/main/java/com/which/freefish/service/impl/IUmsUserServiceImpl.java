@@ -21,8 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
-import java.util.Date;
 
+import java.util.Date;
 
 
 @Slf4j
@@ -56,18 +56,19 @@ public class IUmsUserServiceImpl extends ServiceImpl<UmsUserMapper, UmsUser> imp
 
         return addUser;
     }
+
     @Override
     public UmsUser getUserByUsername(String username) {
         return baseMapper.selectOne(new LambdaQueryWrapper<UmsUser>().eq(UmsUser::getUsername, username));
     }
+
     @Override
     public String executeLogin(LoginDTO dto) {
         String token = null;
         try {
             UmsUser user = getUserByUsername(dto.getUsername());
             String encodePwd = MD5Utils.getPwd(dto.getPassword());
-            if(!encodePwd.equals(user.getPassword()))
-            {
+            if (!encodePwd.equals(user.getPassword())) {
                 throw new Exception("密码错误");
             }
             token = JwtUtil.generateToken(String.valueOf(user.getUsername()));
@@ -76,6 +77,7 @@ public class IUmsUserServiceImpl extends ServiceImpl<UmsUserMapper, UmsUser> imp
         }
         return token;
     }
+
     @Override
     public ProfileVO getUserProfile(String id) {
         ProfileVO profile = new ProfileVO();

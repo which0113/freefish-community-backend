@@ -24,6 +24,7 @@ public class IBmsTopicTagServiceImpl extends ServiceImpl<BmsTopicTagMapper, BmsT
         wrapper.lambda().eq(BmsTopicTag::getTopicId, topicId);
         return this.baseMapper.selectList(wrapper);
     }
+
     @Override
     public void createTopicTag(String id, List<BmsTag> tags) {
         // 先删除topicId对应的所有记录
@@ -37,6 +38,7 @@ public class IBmsTopicTagServiceImpl extends ServiceImpl<BmsTopicTagMapper, BmsT
             this.baseMapper.insert(topicTag);
         });
     }
+
     @Override
     public Set<String> selectTopicIdsByTagId(String id) {
         return this.baseMapper.getTopicIdsByTagId(id);
