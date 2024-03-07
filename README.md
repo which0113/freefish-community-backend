@@ -60,7 +60,6 @@ PUT bms_post
 - Spring MVC
 - MySQL 数据库
 - Spring Security （JWT 安全校验）
-- Spring Boot Starter（SDK 开发）
 - Swagger + Knife4j 接口文档
 - ElasticSearch 全文搜索
 - Redis 数据缓存
